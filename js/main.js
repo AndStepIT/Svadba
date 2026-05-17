@@ -28,33 +28,38 @@
   }
 
   function initRansomTitles() {
-    document.querySelectorAll("[data-ransom]").forEach((heading, headingIndex) => {
-      const text = heading.textContent.trim();
-      heading.textContent = "";
-      heading.setAttribute("aria-label", text);
+    document
+      .querySelectorAll("[data-ransom]")
+      .forEach((heading, headingIndex) => {
+        const text = heading.textContent.trim();
+        heading.textContent = "";
+        heading.setAttribute("aria-label", text);
 
-      const rand = seededRandom(headingIndex * 997 + 42);
+        const rand = seededRandom(headingIndex * 997 + 42);
 
-      [...text].forEach((char, i) => {
-        if (char === " ") {
-          const space = document.createElement("span");
-          space.className = "letter letter--space";
-          space.setAttribute("aria-hidden", "true");
-          heading.appendChild(space);
-          return;
-        }
+        [...text].forEach((char, i) => {
+          if (char === " ") {
+            const space = document.createElement("span");
+            space.className = "letter letter--space";
+            space.setAttribute("aria-hidden", "true");
+            heading.appendChild(space);
+            return;
+          }
 
-        const span = document.createElement("span");
-        span.className = "letter";
-        span.textContent = char;
-        span.setAttribute("aria-hidden", "true");
-        span.style.setProperty("--rot", `${(rand() * 24 - 12).toFixed(1)}deg`);
-        span.style.fontFamily = FONTS[Math.floor(rand() * FONTS.length)];
-        span.style.background = COLORS[Math.floor(rand() * COLORS.length)];
-        span.style.transitionDelay = `${i * 40}ms`;
-        heading.appendChild(span);
+          const span = document.createElement("span");
+          span.className = "letter";
+          span.textContent = char;
+          span.setAttribute("aria-hidden", "true");
+          span.style.setProperty(
+            "--rot",
+            `${(rand() * 24 - 12).toFixed(1)}deg`,
+          );
+          span.style.fontFamily = FONTS[Math.floor(rand() * FONTS.length)];
+          span.style.background = COLORS[Math.floor(rand() * COLORS.length)];
+          span.style.transitionDelay = `${i * 40}ms`;
+          heading.appendChild(span);
+        });
       });
-    });
   }
 
   function initScrollReveal() {
@@ -74,28 +79,10 @@
           }
         });
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
     );
 
     targets.forEach((el) => observer.observe(el));
-  }
-
-  function placeStickers() {
-    const pageBody = document.querySelector(".page-body");
-    const stickers = document.querySelector(".page-stickers");
-    if (!pageBody || !stickers) return;
-
-    const syncHeight = () => {
-      stickers.style.height = `${pageBody.offsetHeight}px`;
-    };
-
-    syncHeight();
-    window.addEventListener("resize", syncHeight);
-
-    if ("ResizeObserver" in window) {
-      const ro = new ResizeObserver(syncHeight);
-      ro.observe(pageBody);
-    }
   }
 
   function initHeroReveal() {
@@ -108,7 +95,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     initRansomTitles();
     initScrollReveal();
-    placeStickers();
     initHeroReveal();
   });
 })();

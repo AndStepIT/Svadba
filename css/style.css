@@ -33,16 +33,20 @@ body {
   color: var(--text);
   background-color: var(--bg);
   background-image:
-    repeating-linear-gradient(45deg,
+    repeating-linear-gradient(
+      45deg,
       rgba(120, 0, 20, 0.15) 0,
       rgba(120, 0, 20, 0.15) 12px,
       rgba(80, 0, 10, 0.12) 12px,
-      rgba(80, 0, 10, 0.12) 24px),
-    repeating-linear-gradient(-45deg,
+      rgba(80, 0, 10, 0.12) 24px
+    ),
+    repeating-linear-gradient(
+      -45deg,
       rgba(60, 0, 30, 0.1) 0,
       rgba(60, 0, 30, 0.1) 8px,
       transparent 8px,
-      transparent 16px);
+      transparent 16px
+    );
   overflow-x: hidden;
 }
 
@@ -88,98 +92,26 @@ img {
   overflow-x: clip;
 }
 
-/* Floating stickers */
-.page-stickers {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  pointer-events: none;
-  z-index: 5;
-  overflow: hidden;
-}
-
-.sticker {
-  position: absolute;
-  width: min(42vw, 200px);
-  height: auto;
-  object-fit: contain;
-  filter:
-    drop-shadow(4px 4px 0 var(--lime)) drop-shadow(-3px -3px 0 var(--magenta));
-  animation-duration: 3s;
-  animation-timing-function: steps(4, end);
-  animation-iteration-count: infinite;
-  opacity: 0.92;
-}
-
-.sticker--left {
-  left: 0;
-  transform-origin: bottom center;
-}
-
-.sticker--right {
-  right: 0;
-  transform-origin: bottom center;
-}
-
-.sticker[data-sticker="0"] {
-  top: 10%;
-  animation-duration: 2.8s;
-}
-
-.sticker[data-sticker="1"] {
-  top: 18%;
-  animation-duration: 3.4s;
-  animation-direction: reverse;
-}
-
-.sticker[data-sticker="2"] {
-  top: 38%;
-  animation-duration: 2.5s;
-}
-
-.sticker[data-sticker="3"] {
-  top: 58%;
-  animation-duration: 4.2s;
-  animation-direction: reverse;
-}
-
-.sticker[data-sticker="4"] {
-  top: 78%;
-  animation-duration: 3.1s;
-}
-
 @keyframes wobble-left {
-
   0%,
   100% {
-    transform: rotate(-7deg) translateX(-2%);
+    transform: rotate(-7deg) translateX(-2%) scale(1.2);
   }
 
   50% {
-    transform: rotate(7deg) translateX(-2%);
+    transform: rotate(7deg) translateX(-2%) scale(1.2);
   }
 }
 
 @keyframes wobble-right {
-
   0%,
   100% {
-    transform: rotate(-7deg) translateX(2%);
+    transform: rotate(-7deg) translateX(2%) scale(1.2);
   }
 
   50% {
-    transform: rotate(7deg) translateX(2%);
+    transform: rotate(7deg) translateX(2%) scale(1.2);
   }
-}
-
-.sticker--left {
-  animation-name: wobble-left;
-}
-
-.sticker--right {
-  animation-name: wobble-right;
 }
 
 /* Content */
@@ -350,7 +282,6 @@ li {
 }
 
 @keyframes calendar-wobble {
-
   0%,
   100% {
     transform: rotate(-3deg);
@@ -362,12 +293,115 @@ li {
 }
 
 /* Gifts */
+.gift-stage {
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  margin-top: 1.25rem;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 0.5rem clamp(0.5rem, 2vw, 1.25rem) 1.5rem;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.35rem clamp(0.25rem, 1.5vw, 1rem);
+  overflow: visible;
+}
+
+.gift-photos {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
+  z-index: 1;
+  pointer-events: none;
+  min-height: 100%;
+  align-self: stretch;
+  padding: 0.25rem 0;
+}
+
+.gift-photos--left {
+  grid-column: 1;
+  align-items: flex-start;
+}
+
+.gift-photos--right {
+  grid-column: 3;
+  align-items: flex-end;
+}
+
+.gift-photo {
+  width: 100%;
+  max-width: min(100%, calc(26rem / 1.2));
+  height: auto;
+  object-fit: contain;
+  opacity: 0.92;
+  filter: drop-shadow(4px 4px 0 var(--lime))
+    drop-shadow(-3px -3px 0 var(--magenta));
+  transform-origin: bottom center;
+  transform: scale(1.2);
+  animation-duration: 3s;
+  animation-timing-function: steps(4, end);
+  animation-iteration-count: infinite;
+}
+
+.gift-photos--left .gift-photo {
+  animation-name: wobble-left;
+}
+
+.gift-photos--right .gift-photo {
+  animation-name: wobble-right;
+}
+
+.gift-photos--left .gift-photo:nth-child(1) {
+  animation-duration: 2.8s;
+}
+
+.gift-photos--left .gift-photo:nth-child(2) {
+  animation-duration: 2.5s;
+  animation-direction: reverse;
+}
+
+.gift-photos--left .gift-photo:nth-child(3) {
+  animation-duration: 3.1s;
+}
+
+.gift-photos--right .gift-photo:nth-child(1) {
+  animation-duration: 3.4s;
+  animation-direction: reverse;
+}
+
+.gift-photos--right .gift-photo:nth-child(2) {
+  animation-duration: 4.2s;
+}
+
+/* Шахматный сдвиг: чётные влево, нечётные вправо — зеркально на другой стороне */
+.gift-photos--left .gift-photo:nth-child(odd) {
+  margin-left: 0;
+}
+
+.gift-photos--left .gift-photo:nth-child(even) {
+  margin-left: clamp(1rem, 14%, 3.25rem);
+}
+
+.gift-photos--right .gift-photo:nth-child(odd) {
+  margin-right: clamp(1rem, 14%, 3.25rem);
+}
+
+.gift-photos--right .gift-photo:nth-child(even) {
+  margin-right: 0;
+}
+
 .gift-row {
+  grid-column: 2;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
-  margin-top: 1.25rem;
   position: relative;
   z-index: 2;
 }
@@ -375,9 +409,9 @@ li {
 .gift-row img {
   max-width: 160px;
   width: 100%;
-  filter: drop-shadow(3px 3px 0 var(--lime)) drop-shadow(-2px -2px 0 var(--magenta));
+  filter: drop-shadow(3px 3px 0 var(--lime))
+    drop-shadow(-2px -2px 0 var(--magenta));
 }
-
 
 .gift-row img:nth-child(2) {
   transform: rotate(4deg);
@@ -441,46 +475,38 @@ li {
     padding: 1.25rem 1.4rem;
   }
 
-  .sticker {
-    width: min(38vw, 220px);
-  }
-
   .calendar-cutout {
     max-width: 320px;
   }
 }
 
 @media (min-width: 640px) {
+  .gift-stage {
+    gap: 0.5rem 0.75rem;
+    padding: 1rem 0 2rem;
+  }
+
+  .gift-photo {
+    max-width: min(100%, calc(32rem / 1.2));
+  }
+
+  .gift-photos--left .gift-photo:nth-child(even) {
+    margin-left: 4rem;
+  }
+
+  .gift-photos--right .gift-photo:nth-child(odd) {
+    margin-right: 4rem;
+  }
+
   .gift-row {
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
+    gap: 1rem;
   }
 
   .gift-row img {
     max-width: 140px;
-  }
-
-  .sticker {
-    width: 180px;
-  }
-
-  .sticker--left {
-    left: 0;
-  }
-
-  .sticker--right {
-    right: 0;
-  }
-}
-
-@media (min-width: 900px) {
-  .page-stickers .sticker--left {
-    left: max(2%, calc(50% - 22rem - 200px));
-  }
-
-  .page-stickers .sticker--right {
-    right: max(2%, calc(50% - 22rem - 200px));
   }
 }
 
@@ -490,7 +516,11 @@ li {
     scroll-behavior: auto;
   }
 
-  .sticker,
+  .gift-photo {
+    animation: none !important;
+    transform: scale(1.2);
+  }
+
   .calendar-cutout {
     animation: none !important;
   }
