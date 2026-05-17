@@ -1,0 +1,509 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #1a0508;
+  --bg-panel: #fff8e8;
+  --text: #1a0508;
+  --magenta: #ff00ff;
+  --lime: #00ff00;
+  --cyan: #00ffff;
+  --yellow: #ffff00;
+  --hot-pink: #ff1493;
+  --acid-red: #ff2255;
+  --shadow-neon: 3px 3px 0 var(--magenta), -2px -2px 0 var(--lime);
+}
+
+html {
+  scroll-behavior: smooth;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--text);
+  background-color: var(--bg);
+  background-image:
+    repeating-linear-gradient(45deg,
+      rgba(120, 0, 20, 0.15) 0,
+      rgba(120, 0, 20, 0.15) 12px,
+      rgba(80, 0, 10, 0.12) 12px,
+      rgba(80, 0, 10, 0.12) 24px),
+    repeating-linear-gradient(-45deg,
+      rgba(60, 0, 30, 0.1) 0,
+      rgba(60, 0, 30, 0.1) 8px,
+      transparent 8px,
+      transparent 16px);
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+/* Hero — отдельно от стикеров, на всю ширину */
+.hero {
+  position: relative;
+  z-index: 20;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  width: 100%;
+  background: #3d0a12;
+  isolation: isolate;
+}
+
+.hero img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center top;
+  vertical-align: top;
+}
+
+/* Контент ниже hero — стикеры только здесь */
+.page-body {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+}
+
+/* Floating stickers */
+.page-stickers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.sticker {
+  position: absolute;
+  width: min(42vw, 200px);
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(4px 4px 0 var(--lime)) drop-shadow(-3px -3px 0 var(--magenta));
+  animation-duration: 3s;
+  animation-timing-function: steps(4, end);
+  animation-iteration-count: infinite;
+  opacity: 0.92;
+}
+
+.sticker--left {
+  left: 0;
+  transform-origin: bottom center;
+}
+
+.sticker--right {
+  right: 0;
+  transform-origin: bottom center;
+}
+
+.sticker[data-sticker="0"] {
+  top: 10%;
+  animation-duration: 2.8s;
+}
+
+.sticker[data-sticker="1"] {
+  top: 18%;
+  animation-duration: 3.4s;
+  animation-direction: reverse;
+}
+
+.sticker[data-sticker="2"] {
+  top: 38%;
+  animation-duration: 2.5s;
+}
+
+.sticker[data-sticker="3"] {
+  top: 58%;
+  animation-duration: 4.2s;
+  animation-direction: reverse;
+}
+
+.sticker[data-sticker="4"] {
+  top: 78%;
+  animation-duration: 3.1s;
+}
+
+@keyframes wobble-left {
+
+  0%,
+  100% {
+    transform: rotate(-7deg) translateX(-2%);
+  }
+
+  50% {
+    transform: rotate(7deg) translateX(-2%);
+  }
+}
+
+@keyframes wobble-right {
+
+  0%,
+  100% {
+    transform: rotate(-7deg) translateX(2%);
+  }
+
+  50% {
+    transform: rotate(7deg) translateX(2%);
+  }
+}
+
+.sticker--left {
+  animation-name: wobble-left;
+}
+
+.sticker--right {
+  animation-name: wobble-right;
+}
+
+/* Content */
+.content {
+  position: relative;
+  z-index: 10;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 3rem;
+}
+
+.section {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+}
+
+/* Ransom-note titles */
+.ransom-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.15rem 0.2rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.ransom-title .letter {
+  display: inline-block;
+  padding: 0.15em 0.2em;
+  color: #000;
+  line-height: 1;
+  font-size: clamp(1.1rem, 4.5vw, 1.65rem);
+  border: 2px solid #000;
+  box-shadow: 2px 2px 0 #000;
+  transform: rotate(var(--rot, 0deg));
+  opacity: 0;
+  transform: rotate(var(--rot, 0deg)) scale(0.3);
+  transition:
+    opacity 0.35s steps(6),
+    transform 0.4s steps(6);
+}
+
+.ransom-title.is-visible .letter {
+  opacity: 1;
+  transform: rotate(var(--rot, 0deg)) scale(1);
+}
+
+.ransom-title .letter--space {
+  width: 0.5em;
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+}
+
+/* Panels */
+.panel {
+  background: var(--bg-panel);
+  border: 3px solid #000;
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow-neon);
+  position: relative;
+  z-index: 2;
+}
+
+.panel--acid {
+  background: linear-gradient(135deg, #fff8e8 0%, #ffe0f5 50%, #e8fff0 100%);
+  border-color: var(--magenta);
+}
+
+.panel--final {
+  text-align: center;
+  border-color: var(--cyan);
+}
+
+.lead {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+.address {
+  font-weight: 600;
+  background: var(--yellow);
+  display: inline-block;
+  padding: 0.35em 0.5em;
+  border: 2px dashed #000;
+  transform: rotate(-1deg);
+}
+
+.highlight {
+  background: var(--lime);
+  color: #000;
+  padding: 0.4em 0.6em;
+  font-weight: 700;
+  border: 2px solid #000;
+  transform: rotate(1deg);
+  margin-bottom: 0;
+}
+
+ul {
+  padding-left: 1.2rem;
+  margin: 0.75rem 0;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+/* Program */
+.program-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.program-item {
+  margin-bottom: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border: 2px solid #000;
+  font-weight: 600;
+  background: var(--cyan);
+  box-shadow: 3px 3px 0 var(--magenta);
+  transform: rotate(-0.5deg);
+}
+
+.program-item:nth-child(2) {
+  background: var(--yellow);
+  transform: rotate(0.8deg);
+}
+
+.program-item:nth-child(3) {
+  background: var(--hot-pink);
+  color: #fff;
+  transform: rotate(-0.3deg);
+}
+
+/* Calendar cutout */
+.calendar-cutout {
+  margin: 1.5rem auto 0;
+  max-width: 280px;
+  position: relative;
+  z-index: 2;
+  transform: rotate(-3deg);
+  animation: calendar-wobble 4s steps(3, end) infinite;
+}
+
+.calendar-cutout::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(2deg);
+  width: 70px;
+  height: 22px;
+  background: rgba(255, 240, 245, 0.85);
+  border: 1px solid rgba(209, 142, 146, 0.6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.calendar-cutout img {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(4px 6px 12px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes calendar-wobble {
+
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+/* Gifts */
+.gift-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+  position: relative;
+  z-index: 2;
+}
+
+.gift-row img {
+  max-width: 160px;
+  width: 100%;
+  filter: drop-shadow(3px 3px 0 var(--lime)) drop-shadow(-2px -2px 0 var(--magenta));
+}
+
+
+.gift-row img:nth-child(2) {
+  transform: rotate(4deg);
+}
+
+.gift-row img:nth-child(3) {
+  transform: rotate(-3deg);
+}
+
+/* RSVP */
+.deadline {
+  font-size: 1.1rem;
+  background: var(--magenta);
+  color: #fff;
+  padding: 0.5em;
+  border: 2px solid #000;
+  margin-top: 0;
+}
+
+.sign-off {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.signature {
+  font-family: "Kelly Slab", Georgia, serif;
+  font-size: 1.15rem;
+  margin-bottom: 0;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+  transition:
+    opacity 0.5s steps(6),
+    transform 0.55s steps(6);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.hero.reveal {
+  transform: none;
+}
+
+.hero.reveal.is-visible {
+  transform: none;
+}
+
+/* Wider screens */
+@media (min-width: 480px) {
+  .content {
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+  }
+
+  .panel {
+    padding: 1.25rem 1.4rem;
+  }
+
+  .sticker {
+    width: min(38vw, 220px);
+  }
+
+  .calendar-cutout {
+    max-width: 320px;
+  }
+}
+
+@media (min-width: 640px) {
+  .gift-row {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .gift-row img {
+    max-width: 140px;
+  }
+
+  .sticker {
+    width: 180px;
+  }
+
+  .sticker--left {
+    left: 0;
+  }
+
+  .sticker--right {
+    right: 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .page-stickers .sticker--left {
+    left: max(2%, calc(50% - 22rem - 200px));
+  }
+
+  .page-stickers .sticker--right {
+    right: max(2%, calc(50% - 22rem - 200px));
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .sticker,
+  .calendar-cutout {
+    animation: none !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .ransom-title .letter {
+    opacity: 1;
+    transform: rotate(var(--rot, 0deg));
+    transition: none;
+  }
+}
